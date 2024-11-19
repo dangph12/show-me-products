@@ -1,6 +1,6 @@
 function App(){
     return (
-        <div>FER202 - Practical Exam given</div>
+        <div>Hello World</div>
     )
 }
 
