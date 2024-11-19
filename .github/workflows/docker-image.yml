@@ -13,7 +13,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - run: sudo docker build . -t show-me-recipes:latest 
+    - uses: actions/checkout@v4
+    - run: sudo docker build . --file Dockerfile --tag show-me-recipes:latest 
     - run: sudo docker stop show-me-recipes
     - run: sudo docker rm show-me-recipes
     - run: sudo docker run -d --name show-me-recipes -p 80:80 show-me-recipes:latest
