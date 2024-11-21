@@ -24,7 +24,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build, tag, and push docker image to Amazon ECR
         env:
-          REGISTRY: cattamthe
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: show-me-recipes
           IMAGE_TAG: ${{ github.sha }}
         run: |
@@ -32,7 +32,7 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
       - name: Deploy docker image to EC2
         env:
-          REGISTRY: cattamthe
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: show-me-recipes
           IMAGE_TAG: ${{ github.sha }}
           AWS_DEFAULT_REGION: ap-southeast-1
