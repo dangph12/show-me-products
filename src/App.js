@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useEffect} from 'react';
 function App(){
-    const url = process.env.API_BASE_URL;
+    const url = process.env.REACT_APP_API_PATH;
     useEffect(() => {
         axios.get(`${url}/recipes`)
         .then(response => {
