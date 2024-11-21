@@ -7,7 +7,7 @@ function App(){
         .then(response => {
             console.log(response.data);
         })
-    }, [])
+    }, [url])
     return (
         <div>Hello World</div>
     )
