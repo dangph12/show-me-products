@@ -2,18 +2,14 @@
 
 FROM node:hydrogen-slim AS node
 
-ARG workdir=.
-LABEL description="deploy react app"
-
 WORKDIR /app
 
-COPY ${workdir}/ /app/
+COPY . /app/
 
-RUN npm ci
-
-RUN npm run build
+RUN ["npm", "ci", "&&", "npm", "run", "build"]
 
 FROM nginx:1.13-alpine
+
 COPY --from=node /app/build/ /var/www/dist/
 
 COPY --from=node /app/nginx.conf /etc/nginx/nginx.conf
