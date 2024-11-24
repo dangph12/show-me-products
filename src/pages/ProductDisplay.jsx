@@ -11,7 +11,7 @@ function ProductDisplay() {
     axios.get(`${url}/products`).then((res) => {
       setProducts(res.data);
     }); 
-  }, []);
+  }, [url]);
 
   return (
     <MainLayout>
