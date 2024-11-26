@@ -4,7 +4,7 @@ import ProductsProvider from "../contexts/ProductsContext";
 import CategoriesProvider from "../contexts/CategoriesContext";
 import SingleFilterProvider from "../contexts/SingleFilterContext";
 import MultiFiltersProvider from "../contexts/MultiFiltersContext";
-import CartProvider from "../contexts/CartContext";
+import { CartProvider } from "../contexts/CartContext";
 
 
 function AppWrapper({ children }) {
