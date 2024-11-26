@@ -4,11 +4,14 @@ import Loading from "../components/Loading";
 import ListGroup from "react-bootstrap/ListGroup";
 import { Card, Col, Row, Pagination, Button } from "react-bootstrap";
 import { ProductsContext } from "../contexts/ProductsContext";
+import { SearchContext } from "../contexts/SearchContext";
+import { Link } from "react-router-dom";
 
 const ProductList = lazy(() => import("../components/ProductList"));
 
 function ProductDisplay() {
   const { products } = useContext(ProductsContext);
+  const { search } = useContext(SearchContext);
 
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +20,15 @@ function ProductDisplay() {
   // Calculate indices for slicing products
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const currentProducts2 = products.filter((pro) => {
+    const nameFound = pro?.title
+      ?.toLowerCase()
+      ?.includes(search?.toLowerCase());
+    return nameFound;
+  });
 
   // Calculate total pages
   const totalPages = Math.ceil(products.length / productsPerPage);
@@ -29,8 +40,8 @@ function ProductDisplay() {
 
   return (
     <div className="container">
+      <SearchBar />
       <Suspense fallback={<Loading />}>
-        <SearchBar/>
         <Row className="mt-4">
           {/* Render only the current page's products */}
           {currentProducts.map((pro, index) => (
@@ -43,11 +54,13 @@ function ProductDisplay() {
                 <ListGroup className="list-group-flush">
                   <ListGroup.Item>Price: ${pro.price}</ListGroup.Item>
                   <ListGroup.Item>Category: {pro.category}</ListGroup.Item>
-                  <ListGroup.Item>Tag: {pro.tags.join(",")}</ListGroup.Item>
+                  <ListGroup.Item>Tag: {pro.tags.join(" ,")}</ListGroup.Item>
                   <ListGroup.Item>Brand: {pro.brand}</ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
-                  <Button href="#">Details</Button>
+                  <Link to={`product/${pro.id}`}>
+                    <Button>Details</Button>
+                  </Link>
                 </Card.Body>
               </Card>
             </Col>
