@@ -1,0 +1,16 @@
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
+
+export const CartContext = createContext();
+
+function CartProvider({ children }) {
+  const [cart, setCart] = useState([]);
+
+  return (
+    <CartContext.Provider value={{ cart, setCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export default CartProvider;
