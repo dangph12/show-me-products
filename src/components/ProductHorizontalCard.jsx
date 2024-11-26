@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function ProductHorizontalCard({ product }) {
   return (
@@ -17,6 +18,7 @@ function ProductHorizontalCard({ product }) {
             <Card.Text className="text-danger text-decoration-line-through">
               {product.price}
             </Card.Text>
+            <Button as={Link} to={`/product/${product.id}`} variant="info" size="sm">Detail</Button>
           </Card.Body>
         </Col>
       </Row>

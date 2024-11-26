@@ -10,7 +10,7 @@ import {
   Dropdown,
   DropdownButton,
 } from "react-bootstrap";
-import { FaBell, FaShoppingCart } from "react-icons/fa";
+// import { FaBell, FaShoppingCart } from "react-icons/fa";
 
 function Header() {
   return (
