@@ -4,9 +4,12 @@ import ProductsProvider from "../contexts/ProductsContext";
 import CategoriesProvider from "../contexts/CategoriesContext";
 import SingleFilterProvider from "../contexts/SingleFilterContext";
 import MultiFiltersProvider from "../contexts/MultiFiltersContext";
+import CartProvider from "../contexts/CartContext";
+
 
 function AppWrapper({ children }) {
   return (
+    <CartProvider>
     <ProductsProvider>
       <CategoriesProvider>
         <SearchProvider>
@@ -16,6 +19,7 @@ function AppWrapper({ children }) {
         </SearchProvider>
       </CategoriesProvider>
     </ProductsProvider>
+    </CartProvider>
   );
 }
 
