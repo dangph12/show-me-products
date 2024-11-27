@@ -18,7 +18,7 @@ export const CartProvider = ({ children }) => {
             : item
         );
       } else {
-        // Add new product with quantity
+        
         return [...prevCart, { ...product, quantity }];
       }
     });
