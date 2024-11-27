@@ -40,7 +40,9 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {routes.map((route, index) => (
-              <Nav.Link  style={{marginLeft: "50px"}} href={route.path}>{route.name}</Nav.Link>
+              <Nav.Link  style={{marginLeft: "50px"}} href={route.path}>
+                <strong>{route.name}</strong>
+              </Nav.Link>
             ))}
           </Nav>
         </Navbar.Collapse>
