@@ -89,16 +89,6 @@
 import React, { lazy, Suspense, useContext, useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import Loading from "../components/Loading";
-<<<<<<< HEAD
-import SingleFilter from "../components/SingleFilter";
-import MultiFilters from "../components/MultiFilters";
-import { Container } from "react-bootstrap";
-
-const ProductList = lazy(() => import("../components/ProductList"));
-const ProductGrid = lazy(() => import("../components/ProductGrid"));
-const ProductTable = lazy(() => import("../components/ProductTable"));
-
-=======
 import ListGroup from "react-bootstrap/ListGroup";
 import { Card, Col, Row, Pagination, Button } from "react-bootstrap";
 import { ProductsContext } from "../contexts/ProductsContext";
@@ -106,7 +96,6 @@ import { SearchContext } from "../contexts/SearchContext";
 import { Link } from "react-router-dom";
 
 const ProductList = lazy(() => import("../components/ProductList"));
->>>>>>> 02ea4d5404dc2e96ec1a43300c0900e3c263cc3f
 
 function ProductDisplay() {
   const { products } = useContext(ProductsContext); // Access all products
@@ -143,17 +132,6 @@ function ProductDisplay() {
   };
 
   return (
-<<<<<<< HEAD
-    <>
-
-      <SearchBar />
-
-      <SingleFilter />
-      <Suspense fallback={<Loading />}>
-        <ProductGrid />
-      </Suspense>
-    </>
-=======
     <div className="container">
       <SearchBar />
       <Suspense fallback={<Loading />}>
@@ -173,7 +151,7 @@ function ProductDisplay() {
                   <ListGroup.Item>Brand: {pro.brand}</ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
-                  <Link to={`product/${pro.id}`}>
+                  <Link to={`/product/${pro.id}`}>
                     <Button>Details</Button>
                   </Link>
                 </Card.Body>
@@ -203,7 +181,6 @@ function ProductDisplay() {
         )}
       </Suspense>
     </div>
->>>>>>> 02ea4d5404dc2e96ec1a43300c0900e3c263cc3f
   );
 }
 
