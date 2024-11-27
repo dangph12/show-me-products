@@ -10,6 +10,7 @@ import {
   Dropdown,
   DropdownButton,
 } from "react-bootstrap";
+import { Link } from "react-router-dom"
 // import { FaBell, FaShoppingCart } from "react-icons/fa";
 
 function Header() {
@@ -23,7 +24,7 @@ function Header() {
 
       {routes.map((route, idx) => (
         <Nav.Item key={idx + route.name}>
-          <Nav.Link href={route.path}>{route.name}</Nav.Link>
+          <Nav.Link as={Link} to={route.path}>{route.name}</Nav.Link>
         </Nav.Item>
       ))}
     </Nav>

@@ -7,8 +7,8 @@ import AppWrapper from "../components/AppWrapper";
 function AppRouter() {
   return (
     <AppWrapper>
-      <MainLayout>
-        <Router>
+      <Router>
+        <MainLayout>
           <Routes>
             {routes.map((route, idx) => (
               <Route
@@ -18,8 +18,8 @@ function AppRouter() {
               />
             ))}
           </Routes>
-        </Router>
-      </MainLayout>
+        </MainLayout>
+      </Router>
     </AppWrapper>
   );
 }
