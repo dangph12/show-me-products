@@ -151,7 +151,7 @@ function ProductDisplay() {
                   <ListGroup.Item>Brand: {pro.brand}</ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
-                  <Link to={`product/${pro.id}`}>
+                  <Link to={`/product/${pro.id}`}>
                     <Button>Details</Button>
                   </Link>
                 </Card.Body>
