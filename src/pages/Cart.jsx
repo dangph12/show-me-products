@@ -1,47 +1,53 @@
 import React, { useContext } from "react";
+import { Container, Col, Row, Button } from "react-bootstrap";
 import { CartContext } from "../contexts/CartContext";
+import { Link } from "react-router-dom";
+import { OrderContext } from "../contexts/OrderContext";
+import CartProductCard from "../components/CartProductCard";
+import CartHeader from "../components/CartHeader";
 
 function Cart() {
   const { cart } = useContext(CartContext);
+  const { order, setOrder } = useContext(OrderContext);
 
   const calculateTotalPrice = () => {
-    return cart.reduce((total, product) => {
-      const price = typeof product.price === "string" 
-        ? parseFloat(product.price.replace("$", "")) 
-        : product.price;
+    return order.products.reduce((total, product) => {
+      const price =
+        typeof product.price === "string"
+          ? parseFloat(product.price.replace("$", ""))
+          : product.price;
 
       return total + price * product.quantity;
     }, 0);
   };
 
   return (
-    <div className="container mt-4">
+    <Container className="mt-4">
       <h2>Your Cart</h2>
-      {cart.length > 0 ? (
-        cart.map((product) => (
-          <div key={product.id} className="mb-4">
-            <img
-              src={product.images[0]}
-              alt={product.title}
-              style={{ width: "100px", height: "100px", objectFit: "cover" }}
-            />
-            <h4>{product.title}</h4>
-            <p>{product.description}</p>
-            <p>Price: {product.price}</p>
-            <p>Quantity: {product.quantity}</p>
-            <p>Total: ${(
-              (typeof product.price === "string"
-                ? parseFloat(product.price.replace("$", ""))
-                : product.price) * product.quantity
-            ).toFixed(2)}</p>
-          </div>
-        ))
-      ) : (
-        <p>Your cart is empty!</p>
-      )}
-
-      <h3>Total Price: ${calculateTotalPrice().toFixed(2)}</h3>
-    </div>
+      <CartHeader />
+      <Container>
+        {cart.length > 0 ? (
+          cart.map((product) => (
+            <Row key={product.id}>
+              <CartProductCard product={product} />
+            </Row>
+          ))
+        ) : (
+          <p>Your cart is empty!</p>
+        )}
+      </Container>
+      <Container className="fixed-bottom">
+        <Row className="bg-white">
+          <Col>
+            <h3>Total Price: ${calculateTotalPrice().toFixed(2)}</h3>
+          </Col>
+          <Col className="d-flex justify-content-end align-items-center">
+          <div>You select {order.products.length} product(s)</div>
+            <Button variant="warning" as={Link} to="/checkout">Checkout</Button>
+          </Col>
+        </Row>
+      </Container>
+    </Container>
   );
 }
 
