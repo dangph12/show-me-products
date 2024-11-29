@@ -10,6 +10,7 @@ function OrderProvider({ children }) {
       phone: "",
     },
     products: [],
+    total: 0,
   });
   return (
     <OrderContext.Provider value={{ order, setOrder }}>
