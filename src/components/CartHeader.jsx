@@ -6,7 +6,7 @@ function CartHeader() {
     <Container>
       <Row className="d-flex align-items-center justify-content-center">
         <Col lg={1} className="d-flex align-items-center justify-content-center">Select</Col>
-        <Col lg={5}>Product</Col>
+        <Col lg={4}>Product</Col>
         <Col lg={2}>
           <p>Price</p>
         </Col>
@@ -15,6 +15,9 @@ function CartHeader() {
         </Col>
         <Col lg={2}>
           <p>Total</p>
+        </Col>
+        <Col lg={1}>
+          <p>Action</p>
         </Col>
       </Row>
     </Container>
