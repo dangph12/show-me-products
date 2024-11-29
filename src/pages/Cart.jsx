@@ -43,6 +43,35 @@ function Cart() {
           </Row>
         </>
       )}
+
+      <Row>
+        <Container className="sticky-bottom bg-white">
+          <Row>
+            <Col className="mx-2">
+              <h3>Total Price: ${order.total.toFixed(2)}</h3>
+            </Col>
+            <Col className="d-flex justify-content-end align-items-center">
+              <div className="mx-2">
+                You select {order.products.length} product(s)
+              </div>
+              {order.products.length <= 0 ? ( 
+                <Button className="mx-2" variant="secondary" disabled>
+                  Checkout
+                </Button>
+              ) : (
+                <Button
+                  className="mx-2"
+                  variant="warning"
+                  as={Link}
+                  to="/checkout"
+                >
+                  Checkout
+                </Button>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </Row>
     </Container>
   );
 }
