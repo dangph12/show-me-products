@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { OrderHistoryContext } from "../contexts/OrderHistoryContext";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Table } from "react-bootstrap";
 
 function OrderHistory() {
   const { orderHistory } = useContext(OrderHistoryContext);
   return (
     <Container fluid className="px-5 mt-4">
       <h1>Order History</h1>
-      <table className="table">
+      <Table striped hover bordered>
         <thead>
           <tr>
             <th>#</th>
@@ -15,6 +15,7 @@ function OrderHistory() {
             <th>Address</th>
             <th>Phone</th>
             <th>Products</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -33,10 +34,11 @@ function OrderHistory() {
                   ))}
                 </ul>
               </td>
+              <td>${order.total}</td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </Container>
   )
 }
