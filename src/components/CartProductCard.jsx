@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { OrderContext } from "../contexts/OrderContext";
+import { CartContext } from "../contexts/CartContext";
 
 function CartProductCard({ product }) {
   const { order, setOrder } = useContext(OrderContext);
+  const { cart, setCart } = useContext(CartContext);
 
   return (
     <Container>
@@ -29,7 +31,7 @@ function CartProductCard({ product }) {
             }}
           ></input>
         </Col>
-        <Col lg={5}>
+        <Col lg={4}>
           <div>
             <img
               src={product.thumbnail}
@@ -54,6 +56,22 @@ function CartProductCard({ product }) {
                 : product.price) * product.quantity
             ).toFixed(2)}
           </p>
+        </Col>
+        <Col lg={1}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              setOrder({
+                ...order,
+                products: order.products.filter(
+                  (orderProduct) => orderProduct !== product
+                ),
+              });
+              setCart(cart.filter((cartProduct) => cartProduct !== product));
+            }}
+          >
+            Remove
+          </Button>
         </Col>
       </Row>
     </Container>
