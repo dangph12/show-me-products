@@ -1,30 +1,43 @@
 import React, { useContext } from 'react'
 import { OrderHistoryContext } from "../contexts/OrderHistoryContext";
+import { Container, Row, Col } from "react-bootstrap";
 
 function OrderHistory() {
   const { orderHistory } = useContext(OrderHistoryContext);
   return (
-    <>
+    <Container fluid className="px-5 mt-4">
       <h1>Order History</h1>
-      <ul>
-        {orderHistory.map((order, index) => (
-          <li key={index}>
-            <h2>Order {index + 1}</h2>
-            <p>Name: {order.customer.name}</p>
-            <p>Address: {order.customer.address}</p>
-            <p>Phone: {order.customer.phone}</p>
-            <h3>Products</h3>
-            <ul>
-              {order.products.map((product) => (
-                <li key={product.id}>
-                  {product.title} - {product.price}
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
-    </>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Products</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orderHistory.map((order, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{order.customer.name}</td>
+              <td>{order.customer.address}</td>
+              <td>{order.customer.phone}</td>
+              <td>
+                <ul>
+                  {order.products.map((product) => (
+                    <li key={product.id}>
+                      {product.title} - {product.price}
+                    </li>
+                  ))}
+                </ul>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </Container>
   )
 }
 
