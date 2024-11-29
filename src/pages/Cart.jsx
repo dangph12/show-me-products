@@ -10,16 +10,13 @@ function Cart() {
   const { cart } = useContext(CartContext);
   const { order, setOrder } = useContext(OrderContext);
 
-  const calculateTotalPrice = () => {
-    return order.products.reduce((total, product) => {
-      const price =
-        typeof product.price === "string"
-          ? parseFloat(product.price.replace("$", ""))
-          : product.price;
-
-      return total + price * product.quantity;
-    }, 0);
-  };
+  useEffect(() => {
+    let total = 0;
+    order.products.forEach((product) => {
+      total += product.price * product.quantity;
+    });
+    setOrder((prevOrder) => ({ ...prevOrder, total: total }));
+  }, [order.products, setOrder]);
 
   return (
     <Container className="mt-4">
