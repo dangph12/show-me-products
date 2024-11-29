@@ -7,8 +7,8 @@ function CartProductCard({ product }) {
 
   return (
     <Container>
-      <Row>
-        <Col>
+      <Row className="my-2 d-flex align-items-center justify-content-center">
+        <Col lg={1} className="d-flex align-items-center justify-content-center">
           <input
             type="checkbox"
             checked={order.products.includes(product)}
@@ -29,25 +29,26 @@ function CartProductCard({ product }) {
             }}
           ></input>
         </Col>
-        <Col>
+        <Col lg={5}>
           <div>
             <img
               src={product.thumbnail}
               alt={product.title}
               style={{ width: "80px" }}
+              className="mx-2"
             />
-            <a>{product.title}</a>
+            <span className="mx-2 inline">{product.title}</span>
           </div>
         </Col>
-        <Col>
-          <p>{product.price}</p>
+        <Col lg={2}>
+          <p>${product.price}</p>
         </Col>
-        <Col>
+        <Col lg={2}>
           <p>{product.quantity}</p>
         </Col>
-        <Col>
+        <Col lg={2}>
           <p>
-            {(
+            ${(
               (typeof product.price === "string"
                 ? parseFloat(product.price.replace("$", ""))
                 : product.price) * product.quantity
