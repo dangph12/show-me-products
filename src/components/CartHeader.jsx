@@ -4,16 +4,16 @@ import { Container, Row, Col } from "react-bootstrap";
 function CartHeader() {
   return (
     <Container>
-      <Row>
-        <Col>Select</Col>
-        <Col>Product</Col>
-        <Col>
+      <Row className="d-flex align-items-center justify-content-center">
+        <Col lg={1} className="d-flex align-items-center justify-content-center">Select</Col>
+        <Col lg={5}>Product</Col>
+        <Col lg={2}>
           <p>Price</p>
         </Col>
-        <Col>
+        <Col lg={2}>
           <p>Quantity</p>
         </Col>
-        <Col>
+        <Col lg={2}>
           <p>Total</p>
         </Col>
       </Row>
