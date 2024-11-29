@@ -19,31 +19,30 @@ function Cart() {
   }, [order.products, setOrder]);
 
   return (
-    <Container className="mt-4">
-      <h2>Your Cart</h2>
-      <CartHeader />
-      <Container>
-        {cart.length > 0 ? (
-          cart.map((product) => (
-            <Row key={product.id}>
-              <CartProductCard product={product} />
-            </Row>
-          ))
-        ) : (
-          <p>Your cart is empty!</p>
-        )}
-      </Container>
-      <Container className="fixed-bottom">
-        <Row className="bg-white">
-          <Col>
-            <h3>Total Price: ${calculateTotalPrice().toFixed(2)}</h3>
-          </Col>
-          <Col className="d-flex justify-content-end align-items-center">
-          <div>You select {order.products.length} product(s)</div>
-            <Button variant="warning" as={Link} to="/checkout">Checkout</Button>
-          </Col>
+    <Container fluid className="px-5 mt-4">
+      {cart.length <= 0 ? (
+        <Row>
+          <h2 className="mx-2">Your Cart is Empty</h2>
         </Row>
-      </Container>
+      ) : (
+        <>
+          <Row>
+            <h2 className="mx-2">Your Cart</h2>
+          </Row>
+          <Row>
+            <CartHeader />
+          </Row>
+          <Row>
+            <Container>
+              {cart.map((product) => (
+                <Row key={product.id}>
+                  <CartProductCard product={product} />
+                </Row>
+              ))}
+            </Container>
+          </Row>
+        </>
+      )}
     </Container>
   );
 }
