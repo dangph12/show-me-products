@@ -45,7 +45,7 @@ jobs:
           envs: PRIVATE_SSH_KEY,REGISTRY,REPOSITORY,IMAGE_TAG,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_DEFAULT_REGION,AWS_REGION
           script: |-
             echo $REGISTRY
-            aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REGISTRY.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+            aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REGISTRY
             sudo docker stop show-me-recipes || true
             sudo docker rm show-me-recipes || true
             sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
