@@ -37,7 +37,7 @@ jobs:
           REPOSITORY: show-me-recipes
           IMAGE_TAG: ${{ github.sha }}
           AWS_DEFAULT_REGION: ap-southeast-1
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ env.SERVER_PUBLIC_IP }}
           username: ubuntu
