@@ -43,10 +43,8 @@ jobs:
           username: ubuntu
           key: ${{ env.PRIVATE_SSH_KEY }}
           script: |-
-            echo ${{ secrets.AWS_ACCESS_KEY_ID }} > aws_access_key_id.txt
-            echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} > aws_secret_access_key.txt
             aws ecr get-login-password --region ${{ env.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ env.REGISTRY }}
-            sudo docker stop show-me-recipes || true
-            sudo docker rm show-me-recipes || true
-            sudo docker pull ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
-            sudo docker run -d --name show-me-recipes -p 80:80 ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+            docker stop show-me-recipes || true
+            docker rm show-me-recipes || true
+            docker pull ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+            docker run -d --name show-me-recipes -p 80:80 ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
