@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
+import { Container, Nav } from "react-bootstrap";
 import routes from "../../routes/index";
 import {
   Navbar,
@@ -15,23 +15,40 @@ import { Link } from "react-router-dom";
 
 function Header() {
   return (
-    <Nav className="container">
-      <Link to="/">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/EBay_logo.svg/800px-EBay_logo.svg.png"
-          width="80"
-          alt="eBay Logo"
-        />
-      </Link>
+    // <Nav className="container">
+    //   <Link to="/">
+    //     <img
+    //       src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/EBay_logo.svg/800px-EBay_logo.svg.png"
+    //       width="80"
+    //       alt="eBay Logo"
+    //     />
+    //   </Link>
 
-      {routes.map((route, idx) => (
-        <Nav.Item key={idx + route.name}>
-          <Nav.Link as={Link} to={route.path}>
-            {route.name}
-          </Nav.Link>
-        </Nav.Item>
-      ))}
-    </Nav>
+    //   {routes.map((route, idx) => (
+    //     <Nav.Item key={idx + route.name}>
+    //       <Nav.Link as={Link} to={route.path}>
+    //         {route.name}
+    //       </Nav.Link>
+    //     </Nav.Item>
+    //   ))}
+    // </Nav>
+
+    <div>
+      <Navbar bg="dark" data-bs-theme="dark">
+        <Container>
+          <img
+            style={{ width: "100px" }}
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/EBay_logo.svg/800px-EBay_logo.svg.png"
+          ></img>
+
+          {routes.map((r, idx) => (
+            <Nav className="me-auto">
+              <Nav.Link  key={idx + r.name} as={Link} to={r.path}>{r.name}</Nav.Link>
+            </Nav>
+          ))}
+        </Container>
+      </Navbar>
+    </div>
   );
 }
 
