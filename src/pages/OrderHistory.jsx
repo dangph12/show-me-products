@@ -1,9 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { OrderHistoryContext } from "../contexts/OrderHistoryContext";
 import { Container, Row, Col, Table } from "react-bootstrap";
 
 function OrderHistory() {
   const { orderHistory } = useContext(OrderHistoryContext);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Container fluid className="px-5 mt-4">
       <h1>Order History</h1>
@@ -29,7 +33,7 @@ function OrderHistory() {
                 <ul>
                   {order.products.map((product) => (
                     <li key={product.id}>
-                      {product.title} - {product.price}
+                      {product.title} - {product.quantity} - {product.price}
                     </li>
                   ))}
                 </ul>
