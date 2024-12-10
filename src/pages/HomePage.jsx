@@ -9,7 +9,7 @@ function HomePage() {
   }, []);
 
   return (
-    <Container>
+    <Container fluid>
       <CarouselSection />
       <CategoriesSection />
     </Container>

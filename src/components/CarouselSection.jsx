@@ -3,7 +3,7 @@ import { Container, Carousel, Image } from "react-bootstrap";
 
 function CarouselSection() {
   return (
-    <Container>
+    <Container fluid>
       <Carousel fade>
         <Carousel.Item>
           <Image
