@@ -14,6 +14,10 @@ function Checkout() {
   const { setCart } = useContext(CartContext);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (
       order.customer.name !== "" &&
       order.customer.address !== "" &&
