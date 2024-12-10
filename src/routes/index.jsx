@@ -29,7 +29,7 @@ const routes = [
     element: <OrderHistory />,
   },
   {
-    path: "/product",
+    path: "/products",
     name: "Product Display",
     element: <ProductDisplay />,
   },
