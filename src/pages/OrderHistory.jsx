@@ -1,18 +1,19 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from "react";
 import { OrderHistoryContext } from "../contexts/OrderHistoryContext";
-import { Container, Row, Col, Table } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 
 function OrderHistory() {
   const { orderHistory } = useContext(OrderHistoryContext);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <Container fluid className="px-5 mt-4">
-      <h1>Order History</h1>
-      <Table striped hover bordered>
-        <thead>
+    <Container className="py-4">
+      <h1 className="mb-4 text-center text-primary fw-bold">Order History</h1>
+      <Table bordered hover responsive className="shadow-sm bg-white">
+        <thead className="bg-light">
           <tr>
             <th>#</th>
             <th>Name</th>
@@ -23,28 +24,35 @@ function OrderHistory() {
           </tr>
         </thead>
         <tbody>
-          {orderHistory.map((order, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{order.customer.name}</td>
-              <td>{order.customer.address}</td>
-              <td>{order.customer.phone}</td>
-              <td>
-                <ul>
+          {orderHistory.length > 0 ? (
+            orderHistory.map((order, index) => (
+              <tr key={index}>
+                <td className="fw-bold">{index + 1}</td>
+                <td>{order.customer.name}</td>
+                <td>{order.customer.address}</td>
+                <td>{order.customer.phone}</td>
+                <td>
                   {order.products.map((product) => (
-                    <li key={product.id}>
-                      {product.title} - {product.quantity} - {product.price}
-                    </li>
+                    <div key={product.id}>
+                      {product.title} - Qty: {product.quantity} - $
+                      {(product.price * product.quantity).toFixed(2)}
+                    </div>
                   ))}
-                </ul>
+                </td>
+                <td className="fw-bold text-success">${order.total.toFixed(2)}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center text-muted">
+                No orders found in your history.
               </td>
-              <td>${order.total}</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </Table>
     </Container>
-  )
+  );
 }
 
-export default OrderHistory
+export default OrderHistory;
