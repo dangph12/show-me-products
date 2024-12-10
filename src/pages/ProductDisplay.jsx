@@ -1,116 +1,36 @@
-// import React, { lazy, Suspense, useContext, useState } from "react";
-// import SearchBar from "../components/SearchBar";
-// import Loading from "../components/Loading";
-// import ListGroup from "react-bootstrap/ListGroup";
-// import { Card, Col, Row, Pagination, Button } from "react-bootstrap";
-// import { ProductsContext } from "../contexts/ProductsContext";
-// import { SearchContext } from "../contexts/SearchContext";
-// import { Link } from "react-router-dom";
+import React, { Suspense, useContext, useState, useEffect } from "react";
+import { Col, Row, Container } from "react-bootstrap";
 
-// const ProductList = lazy(() => import("../components/ProductList"));
-
-// function ProductDisplay() {
-//   const { products } = useContext(ProductsContext);
-//   const { search } = useContext(SearchContext);
-
-//   // State for pagination
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const productsPerPage = 8; // Number of products per page
-
-//   // Calculate indices for slicing products
-//   const indexOfLastProduct = currentPage * productsPerPage;
-//   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-
-//   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-
-//   const currentProducts2 = products.filter((pro) => {
-//     const nameFound = pro?.title
-//       ?.toLowerCase()
-//       ?.includes(search?.toLowerCase());
-//     return nameFound;
-//   });
-
-//   // Calculate total pages
-//   const totalPages = Math.ceil(products.length / productsPerPage);
-
-//   // Handle pagination click
-//   const handlePageChange = (pageNumber) => {
-//     setCurrentPage(pageNumber);
-//   };
-
-//   return (
-//     <div className="container">
-//       <SearchBar />
-//       <Suspense fallback={<Loading />}>
-//         <Row className="mt-4">
-//           {/* Render only the current page's products */}
-//           {currentProducts.map((pro, index) => (
-//             <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-3">
-//               <Card style={{ width: "18rem", marginBottom: "20px" }}>
-//                 <Card.Img variant="top" src={pro.images} />
-//                 <Card.Body>
-//                   <Card.Title>{pro.title}</Card.Title>
-//                 </Card.Body>
-//                 <ListGroup className="list-group-flush">
-//                   <ListGroup.Item>Price: ${pro.price}</ListGroup.Item>
-//                   <ListGroup.Item>Category: {pro.category}</ListGroup.Item>
-//                   <ListGroup.Item>Tag: {pro.tags.join(" ,")}</ListGroup.Item>
-//                   <ListGroup.Item>Brand: {pro.brand}</ListGroup.Item>
-//                 </ListGroup>
-//                 <Card.Body>
-//                   <Link to={`product/${pro.id}`}>
-//                     <Button>Details</Button>
-//                   </Link>
-//                 </Card.Body>
-//               </Card>
-//             </Col>
-//           ))}
-//         </Row>
-
-//         {/* Pagination Controls */}
-//         <Pagination className="justify-content-center">
-//           {[...Array(totalPages).keys()].map((page) => (
-//             <Pagination.Item
-//               key={page + 1}
-//               active={page + 1 === currentPage}
-//               onClick={() => handlePageChange(page + 1)}
-//             >
-//               {page + 1}
-//             </Pagination.Item>
-//           ))}
-//         </Pagination>
-//       </Suspense>
-//     </div>
-//   );
-// }
-
-// export default ProductDisplay;
-
-import React, { lazy, Suspense, useContext, useState, useEffect } from "react";
-import SearchBar from "../components/SearchBar";
-import Loading from "../components/Loading";
-import ListGroup from "react-bootstrap/ListGroup";
-import { Card, Col, Row, Pagination, Button } from "react-bootstrap";
 import { ProductsContext } from "../contexts/ProductsContext";
 import { SearchContext } from "../contexts/SearchContext";
-import { Link } from "react-router-dom";
+import { CategoriesContext } from "../contexts/CategoriesContext";
+import { BrandsContext } from "../contexts/BrandsContext";
 
-const ProductList = lazy(() => import("../components/ProductList"));
+import SearchBar from "../components/SearchBar";
+import Loading from "../components/Loading";
+import SelectCategory from "../components/SelectCategory";
+import SelectBrands from "../components/SelectBrands";
+import PaginationSection from "../components/PaginationSection";
+import ProductGrid from "../components/ProductGrid";
 
 function ProductDisplay() {
-  const { products } = useContext(ProductsContext); // Access all products
-  const { search } = useContext(SearchContext); // Access search term from context
 
-  // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8; // Number of products per page
+  const productsPerPage = 8;
+  const { products } = useContext(ProductsContext);
+  const { search } = useContext(SearchContext);
+  const { selectedCategory } = useContext(CategoriesContext);
+  const { selectedBrands } = useContext(BrandsContext);
 
-  // Step 1: Filter products based on the search term
-  const filteredProducts = products.filter((pro) =>
-    pro?.title?.toLowerCase().includes(search?.toLowerCase())
-  );
 
-  // Step 2: Paginate the filtered products
+  const filteredProducts = products.filter((product) => {
+    const isCategoryMatch =
+      selectedCategory === "All" || product.category === selectedCategory;
+    const isBrandMatch = selectedBrands[product.brand];
+    const isSearchMatch = product.title.toLowerCase().includes(search.toLowerCase());
+    return isCategoryMatch && isBrandMatch && isSearchMatch;
+  });
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
@@ -118,69 +38,53 @@ function ProductDisplay() {
     indexOfLastProduct
   );
 
-  // Step 3: Calculate total pages for filtered products
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
-  // Reset to the first page whenever the search term changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [search]);
+  }, [search, selectedCategory, selectedBrands]);
 
-  // Handle pagination click
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   return (
-    <div className="container">
-      <SearchBar />
-      <Suspense fallback={<Loading />}>
-        <Row className="mt-4">
-          {/* Render only the current page's products */}
-          {currentProducts.map((pro, index) => (
-            <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-3">
-              <Card style={{ width: "18rem", marginBottom: "20px" }}>
-                <Card.Img variant="top" src={pro.images} />
-                <Card.Body>
-                  <Card.Title>{pro.title}</Card.Title>
-                </Card.Body>
-                <ListGroup className="list-group-flush">
-                  <ListGroup.Item>Price: ${pro.price}</ListGroup.Item>
-                  <ListGroup.Item>Category: {pro.category}</ListGroup.Item>
-                  <ListGroup.Item>Tag: {pro.tags.join(", ")}</ListGroup.Item>
-                  <ListGroup.Item>Brand: {pro.brand}</ListGroup.Item>
-                </ListGroup>
-                <Card.Body>
-                  <Link to={`/product/${pro.id}`}>
-                    <Button>Details</Button>
-                  </Link>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-
-        {/* Empty State */}
-        {filteredProducts.length === 0 && (
-          <h4 className="text-center mt-4">No products found.</h4>
-        )}
-
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <Pagination className="justify-content-center mt-4">
-            {[...Array(totalPages).keys()].map((page) => (
-              <Pagination.Item
-                key={page + 1}
-                active={page + 1 === currentPage}
-                onClick={() => handlePageChange(page + 1)}
-              >
-                {page + 1}
-              </Pagination.Item>
-            ))}
-          </Pagination>
-        )}
-      </Suspense>
-    </div>
+    <Container>
+      <Row>
+        <Col md={2}>
+          <SelectCategory />
+        </Col>
+        <Col md={10}>
+          <Row>
+            <SearchBar />
+          </Row>
+          <Row>
+            <SelectBrands />
+          </Row>
+          <Suspense fallback={<Loading />}>
+            {filteredProducts.length === 0 && (
+              <Row>
+                <h4 className="text-center mt-4">No products found.</h4>
+              </Row>
+            )}
+            <Row className="mt-4">
+              <ProductGrid products={currentProducts} />
+            </Row>
+          </Suspense>
+          <Row>
+            <PaginationSection
+              totalPages={totalPages}
+              currentPage={currentPage}
+              handlePageChange={handlePageChange}
+            />
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

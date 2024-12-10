@@ -1,47 +1,84 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { Container, Col, Row, Button } from "react-bootstrap";
 import { CartContext } from "../contexts/CartContext";
+import { Link } from "react-router-dom";
+import { OrderContext } from "../contexts/OrderContext";
+import CartProductCard from "../components/CartProductCard";
+import CartHeader from "../components/CartHeader";
 
 function Cart() {
-  const { cart } = useContext(CartContext);
+  const { cart, incrementQuantity, decrementQuantity } = useContext(CartContext);
+  const { order, setOrder } = useContext(OrderContext);
 
-  const calculateTotalPrice = () => {
-    return cart.reduce((total, product) => {
-      const price = typeof product.price === "string" 
-        ? parseFloat(product.price.replace("$", "")) 
-        : product.price;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-      return total + price * product.quantity;
-    }, 0);
-  };
+  useEffect(() => {
+    let total = 0;
+    cart.forEach((product) => {
+      total += product.price * product.quantity;
+    });
+    setOrder((prevOrder) => ({ ...prevOrder, total: total, products: cart }));
+  }, [cart, setOrder]);
 
   return (
-    <div className="container mt-4">
-      <h2>Your Cart</h2>
-      {cart.length > 0 ? (
-        cart.map((product) => (
-          <div key={product.id} className="mb-4">
-            <img
-              src={product.images[0]}
-              alt={product.title}
-              style={{ width: "100px", height: "100px", objectFit: "cover" }}
-            />
-            <h4>{product.title}</h4>
-            <p>{product.description}</p>
-            <p>Price: {product.price}</p>
-            <p>Quantity: {product.quantity}</p>
-            <p>Total: ${(
-              (typeof product.price === "string"
-                ? parseFloat(product.price.replace("$", ""))
-                : product.price) * product.quantity
-            ).toFixed(2)}</p>
-          </div>
-        ))
+    <Container fluid className="px-5 mt-4">
+      {cart.length <= 0 ? (
+        <Row>
+          <h2 className="mx-2">Your Cart is Empty</h2>
+        </Row>
       ) : (
-        <p>Your cart is empty!</p>
+        <>
+          <Row>
+            <h2 className="mx-2">Your Cart</h2>
+          </Row>
+          <Row>
+            <CartHeader />
+          </Row>
+          <Row>
+            <Container>
+              {cart.map((product) => (
+                <Row key={product.id}>
+                  <CartProductCard
+                    product={product}
+                  />
+                </Row>
+              ))}
+            </Container>
+          </Row>
+        </>
       )}
 
-      <h3>Total Price: ${calculateTotalPrice().toFixed(2)}</h3>
-    </div>
+      <Row>
+        <Container className="sticky-bottom bg-white">
+          <Row>
+            <Col className="mx-2">
+              <h3>Total Price: ${order.total.toFixed(2)}</h3>
+            </Col>
+            <Col className="d-flex justify-content-end align-items-center">
+              <div className="mx-2">
+                You select {order.products.length} product(s)
+              </div>
+              {order.products.length <= 0 ? (
+                <Button className="mx-2" variant="secondary" disabled>
+                  Checkout
+                </Button>
+              ) : (
+                <Button
+                  className="mx-2"
+                  variant="warning"
+                  as={Link}
+                  to="/checkout"
+                >
+                  Checkout
+                </Button>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </Row>
+    </Container>
   );
 }
 
