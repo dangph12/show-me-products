@@ -25,7 +25,7 @@ jobs:
       - name: Build, tag, and push docker image to Amazon ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: show-me-recipes
+          REPOSITORY: show-me-products
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
@@ -34,18 +34,17 @@ jobs:
       - name: Deploy docker image to EC2
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: show-me-recipes
+          REPOSITORY: show-me-products
           IMAGE_TAG: ${{ github.sha }}
           AWS_DEFAULT_REGION: ap-southeast-1
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ env.SERVER_PUBLIC_IP }}
           username: ubuntu
           key: ${{ env.PRIVATE_SSH_KEY }}
-          envs: PRIVATE_SSH_KEY,REGISTRY,REPOSITORY,IMAGE_TAG,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_DEFAULT_REGION,AWS_REGION
           script: |-
-            sudo $(aws ecr get-login --no-include-email --region ap-southeast-1);
-            sudo docker stop show-me-recipes || true
-            sudo docker rm show-me-recipes || true
-            sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
-            sudo docker run -d --name show-me-recipes -p 80:80 $REGISTRY/$REPOSITORY:$IMAGE_TAG
+            aws ecr get-login-password --region ${{ env.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ env.REGISTRY }}
+            docker stop show-me-products || true
+            docker rm show-me-products || true
+            docker pull ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+            docker run -d --name show-me-products -p 80:80 ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}

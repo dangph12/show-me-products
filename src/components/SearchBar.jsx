@@ -4,7 +4,6 @@ import { SearchContext } from "../contexts/SearchContext";
 
 function SearchBar() {
   const { search, setSearch } = useContext(SearchContext);
-  console.log(search);
   
   return (
     <>
