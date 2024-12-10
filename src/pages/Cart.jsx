@@ -7,16 +7,20 @@ import CartProductCard from "../components/CartProductCard";
 import CartHeader from "../components/CartHeader";
 
 function Cart() {
-  const { cart } = useContext(CartContext);
+  const { cart, incrementQuantity, decrementQuantity } = useContext(CartContext);
   const { order, setOrder } = useContext(OrderContext);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     let total = 0;
-    order.products.forEach((product) => {
+    cart.forEach((product) => {
       total += product.price * product.quantity;
     });
-    setOrder((prevOrder) => ({ ...prevOrder, total: total }));
-  }, [order.products, setOrder]);
+    setOrder((prevOrder) => ({ ...prevOrder, total: total, products: cart }));
+  }, [cart, setOrder]);
 
   return (
     <Container fluid className="px-5 mt-4">
@@ -36,7 +40,9 @@ function Cart() {
             <Container>
               {cart.map((product) => (
                 <Row key={product.id}>
-                  <CartProductCard product={product} />
+                  <CartProductCard
+                    product={product}
+                  />
                 </Row>
               ))}
             </Container>
@@ -54,7 +60,7 @@ function Cart() {
               <div className="mx-2">
                 You select {order.products.length} product(s)
               </div>
-              {order.products.length <= 0 ? ( 
+              {order.products.length <= 0 ? (
                 <Button className="mx-2" variant="secondary" disabled>
                   Checkout
                 </Button>

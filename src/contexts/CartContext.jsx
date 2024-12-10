@@ -67,6 +67,28 @@ const CartProvider = ({ children }) => {
   }
   ]);
 
+  const incrementQuantity = (productId) => {
+    setCart((prevCart) =>
+      prevCart.map((product) =>
+        product.id === productId && product.quantity < product.stock
+          ? { ...product, quantity: product.quantity + 1 }
+          : product
+      )
+    );
+  };
+
+  const decrementQuantity = (productId) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((product) =>
+          product.id === productId && product.quantity > 0
+            ? { ...product, quantity: product.quantity - 1 }
+            : product
+        )
+        .filter((product) => product.quantity > 0)
+    );
+  };
+
   
   const addToCart = (product, quantity) => {
     setCart((prevCart) => {
@@ -87,7 +109,7 @@ const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, setCart, addToCart }}>
+    <CartContext.Provider value={{ cart, setCart, addToCart, incrementQuantity, decrementQuantity }}>
       {children}
     </CartContext.Provider>
   );
