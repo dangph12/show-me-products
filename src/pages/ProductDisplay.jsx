@@ -1,5 +1,5 @@
 import React, { Suspense, useContext, useState, useEffect } from "react";
-import { Col, Row, Container } from "react-bootstrap";
+import { Col, Row, Container, Card } from "react-bootstrap";
 
 import { ProductsContext } from "../contexts/ProductsContext";
 import { SearchContext } from "../contexts/SearchContext";
@@ -14,14 +14,12 @@ import PaginationSection from "../components/PaginationSection";
 import ProductGrid from "../components/ProductGrid";
 
 function ProductDisplay() {
-
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
   const { products } = useContext(ProductsContext);
   const { search } = useContext(SearchContext);
   const { selectedCategory } = useContext(CategoriesContext);
   const { selectedBrands } = useContext(BrandsContext);
-
 
   const filteredProducts = products.filter((product) => {
     const isCategoryMatch =
@@ -53,29 +51,48 @@ function ProductDisplay() {
   };
 
   return (
-    <Container>
+    <Container className="py-4">
       <Row>
-        <Col md={2}>
-          <SelectCategory />
-        </Col>
-        <Col md={10}>
-          <Row>
-            <SearchBar />
-          </Row>
-          <Row>
+        {/* Sidebar Section */}
+        <Col md={3}>
+          <Card className="p-3 mb-4 shadow-sm">
+            <h5 className="mb-3 text-primary fw-bold">Categories</h5>
+            <SelectCategory />
+          </Card>
+          {/* <Card className="p-3 shadow-sm">
+            <h5 className="mb-3 text-primary fw-bold">Brands</h5>
             <SelectBrands />
+          </Card> */}
+        </Col>
+
+        {/* Main Section */}
+        <Col md={9}>
+          <Row className="mb-4">
+            
+            <SearchBar />
+            
+            
+            <Card className="p-3 shadow-sm mt-2">
+            <h5 className="mb-3 text-primary fw-bold">Brands</h5>
+            <SelectBrands />
+          </Card>
           </Row>
+
           <Suspense fallback={<Loading />}>
             {filteredProducts.length === 0 && (
               <Row>
-                <h4 className="text-center mt-4">No products found.</h4>
+                <h4 className="text-center text-danger mt-4">
+                  No products found.
+                </h4>
               </Row>
             )}
+
             <Row className="mt-4">
               <ProductGrid products={currentProducts} />
             </Row>
           </Suspense>
-          <Row>
+
+          <Row className="mt-4">
             <PaginationSection
               totalPages={totalPages}
               currentPage={currentPage}
