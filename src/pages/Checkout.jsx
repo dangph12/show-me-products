@@ -9,6 +9,7 @@ function Checkout() {
   const navigate = useNavigate();
   const [isFulfilled, setIsFulfilled] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [errors, setErrors] = useState({});
   const { order, setOrder } = useContext(OrderContext);
   const { orderHistory, setOrderHistory } = useContext(OrderHistoryContext);
   const { setCart } = useContext(CartContext);
@@ -30,35 +31,72 @@ function Checkout() {
     }
   }, [order, setOrder]);
 
-  const handleSubmit = () => {
-    setOrderHistory([...orderHistory, order]);
-    setOrder({
-      customer: {
-        name: "",
-        address: "",
-        phone: "",
-      },
-      products: [],
-      total: 0,
-    });
-    setCart((prevCart) =>
-      prevCart.filter((cartProduct) => !order.products.includes(cartProduct))
-    );
-    setValidated(true);
-    navigate("/order-history");
+  const handleValidation = () => {
+    const newErrors = {};
+
+    // Validate Name
+    if (!order.customer.name.trim()) {
+      newErrors.name = "Name is required.";
+    } else if (order.customer.name.length < 3) {
+      newErrors.name = "Name must be at least 3 characters long.";
+    }
+
+    // Validate Address
+    if (!order.customer.address.trim()) {
+      newErrors.address = "Address is required.";
+    }
+
+    // Validate Phone
+    if (!order.customer.phone.trim()) {
+      newErrors.phone = "Phone number is required.";
+    } else if (!/^\d{10}$/.test(order.customer.phone.trim())) {
+      newErrors.phone = "Phone number must be 10 digits.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (handleValidation()) {
+      setOrderHistory([...orderHistory, order]);
+      setOrder({
+        customer: {
+          name: "",
+          address: "",
+          phone: "",
+        },
+        products: [],
+        total: 0,
+      });
+      setCart((prevCart) =>
+        prevCart.filter((cartProduct) => !order.products.includes(cartProduct))
+      );
+      setValidated(true);
+      navigate("/order-history");
+    } else {
+      setValidated(false);
+    }
   };
 
   return (
     <Container fluid className="px-5 mt-4">
-      <Row>
+      <Row className="mb-4">
         <Col>
-          <Row className="mt-4">
-            <h2>Customer Information</h2>
-          </Row>
-          <Row className="mt-4">
-            <Form noValidate validated={validated} key="order">
-              <Form.Group controlId="formName">
-                <Form.Label>Name</Form.Label>
+          <Button variant="warning" as={Link} to="/cart" className="px-4 py-2">
+            Back to Cart
+          </Button>
+        </Col>
+      </Row>
+      <Row className="gy-4">
+        {/* Customer Information Section */}
+        <Col lg={6}>
+          <div className="p-4 border rounded shadow-sm bg-light">
+            <h2 className="mb-4 ">Customer Information</h2>
+            <Form noValidate onSubmit={handleSubmit}>
+              <Form.Group controlId="formName" className="mb-3">
+                <Form.Label className="fw-bold">Name</Form.Label>
                 <Form.Control
                   required
                   type="text"
@@ -69,13 +107,14 @@ function Checkout() {
                       customer: { ...order.customer, name: e.target.value },
                     })
                   }
+                  isInvalid={!!errors.name}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please provide a name.
+                  {errors.name}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group controlId="formAddress">
-                <Form.Label>Address</Form.Label>
+              <Form.Group controlId="formAddress" className="mb-3">
+                <Form.Label className="fw-bold">Address</Form.Label>
                 <Form.Control
                   required
                   type="text"
@@ -86,13 +125,14 @@ function Checkout() {
                       customer: { ...order.customer, address: e.target.value },
                     })
                   }
+                  isInvalid={!!errors.address}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please provide an address.
+                  {errors.address}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group controlId="formPhone">
-                <Form.Label>Phone</Form.Label>
+              <Form.Group controlId="formPhone" className="mb-3">
+                <Form.Label className="fw-bold">Phone</Form.Label>
                 <Form.Control
                   required
                   type="text"
@@ -103,70 +143,60 @@ function Checkout() {
                       customer: { ...order.customer, phone: e.target.value },
                     })
                   }
+                  isInvalid={!!errors.phone}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please provide a phone number.
+                  {errors.phone}
                 </Form.Control.Feedback>
               </Form.Group>
+              <div className="mt-4 d-flex justify-content-end">
+                <Button variant="success" type="submit">
+                  Place Order
+                </Button>
+              </div>
             </Form>
-          </Row>
-          <Row className="my-4">
-            <Col>
-              <Button variant="warning" as={Link} to="/cart">
-                Back to Cart
-              </Button>
-            </Col>
-            <Col className="d-flex justify-content-end">
-              {isFulfilled ? (
-                <Button
-                  variant="success"
-                  type="submit"
-                  onClick={() => handleSubmit()}
-                >
-                  Place Order
-                </Button>
-              ) : (
-                <Button variant="secondary" disabled>
-                  Place Order
-                </Button>
-              )}
-            </Col>
-          </Row>
+          </div>
         </Col>
-        <Col>
-          <Row className="mt-4">
-            <h2>Total Price: ${order.total.toFixed(2)}</h2>
-          </Row>
-          <Row className="mt-4">
+
+        {/* Order Summary Section */}
+        <Col lg={6}>
+          <div className="p-4 border rounded shadow-sm bg-light sticky-top">
+            <h2 className="mb-4 ">Order Summary</h2>
             <Container>
               {order.products.map((product) => (
                 <Row
-                  className="d-flex align-items-center justify-content-center"
+                  className="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3"
                   key={product.id}
                 >
-                  <Col className="d-flex align-items-center" lg={7}>
-                    <div>
-                      <Image
-                        src={product.thumbnail}
-                        alt={product.title}
-                        style={{ width: "80px" }}
-                        className="mx-2"
-                      />
-                    </div>
-                    <p className="mx-2 inline">{product.title}</p>
+                  <Col lg={3} className="text-center">
+                    <Image
+                      src={product.thumbnail}
+                      alt={product.title}
+                      style={{ width: "80px" }}
+                      className="border rounded"
+                    />
                   </Col>
-                  <Col className="d-flex align-items-center justify-content-center">
-                    <p>Quantity: {product.quantity}</p>
+                  <Col lg={5}>
+                    <p className="mb-1 fw-bold">{product.title}</p>
+                    <p className="text-muted mb-0">Quantity: {product.quantity}</p>
                   </Col>
-                  <Col className="d-flex align-items-center justify-content-center">
-                    <p>Price: ${product.price.toFixed(2) * product.quantity}</p>
+                  <Col lg={4} className="text-end">
+                    <p className="fw-bold text-success">
+                      ${(product.price * product.quantity).toFixed(2)}
+                    </p>
                   </Col>
                 </Row>
               ))}
             </Container>
-          </Row>
+            <h4 className="mt-4 fw-bold text-success">
+              Total Price: ${order.total.toFixed(2)}
+            </h4>
+          </div>
         </Col>
       </Row>
+
+      {/* Action Buttons */}
+      {/*  */}
     </Container>
   );
 }
