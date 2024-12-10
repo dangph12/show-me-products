@@ -73,9 +73,7 @@ function ProductDetail() {
             {product.stock > 0 ? product.stock : "Out of stock"}
           </p>
 
-          {/* Quantity Input */}
           <div className="container mt-4">
-            {/* ... other product details ... */}
             <Form.Group controlId="quantity" className="mb-3">
               <Form.Label>Quantity:</Form.Label>
               <Form.Control

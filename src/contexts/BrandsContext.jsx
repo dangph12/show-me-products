@@ -24,7 +24,7 @@ function BrandsProvider({ children }) {
       }
     });
     setBrands(Object.values(brandsObj));
-  }, [selectedCategory]);
+  }, [products, selectedCategory]);
 
   useEffect(() => {
 

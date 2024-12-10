@@ -12,7 +12,7 @@ function CategoriesSection() {
       <Row className="mt-4">
         {categories.map((category, index) => (
           <Col key={index} xs={6} sm={4} md={3} lg={2} className="mb-4">
-            <Link to={`/products`} key={index} onClick={setSelectedCategory(category.name)}>
+            <Link to={`/products`} key={index} onClick={() => setSelectedCategory(category.name)}>
               <Image
                 src={category.thumbnail}
                 alt={category.name}

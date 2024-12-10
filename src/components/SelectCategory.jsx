@@ -20,8 +20,8 @@ function SelectCategory() {
           All
         </label>
       </div>
-      {categories.map((category) => (
-        <div key={category.name} className="form-check">
+      {categories.map((category, index) => (
+        <div key={category.name + index} className="form-check">
           <input
             className="form-check-input"
             type="radio"
