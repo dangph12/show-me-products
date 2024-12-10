@@ -4,8 +4,7 @@ import OrderProvider from "../contexts/OrderContext";
 import OrderHistoryProvider from "../contexts/OrderHistoryContext";
 import ProductsProvider from "../contexts/ProductsContext";
 import CategoriesProvider from "../contexts/CategoriesContext";
-import SingleFilterProvider from "../contexts/SingleFilterContext";
-import MultiFiltersProvider from "../contexts/MultiFiltersContext";
+import BrandsProvider from "../contexts/BrandsContext";
 import CartProvider from "../contexts/CartContext";
 
 function AppWrapper({ children }) {
@@ -15,11 +14,9 @@ function AppWrapper({ children }) {
         <CartProvider>
           <ProductsProvider>
             <CategoriesProvider>
-              <SearchProvider>
-                <MultiFiltersProvider>
-                  <SingleFilterProvider>{children}</SingleFilterProvider>
-                </MultiFiltersProvider>
-              </SearchProvider>
+              <BrandsProvider>
+                <SearchProvider>{children}</SearchProvider>
+              </BrandsProvider>
             </CategoriesProvider>
           </ProductsProvider>
         </CartProvider>
